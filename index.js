@@ -1,5 +1,9 @@
 module.exports = function parseCacheControl(field) {
 
+  if (typeof field !== 'string') {
+    return null;
+  }
+
   /*
     Cache-Control   = 1#cache-directive
     cache-directive = token [ "=" ( token / quoted-string ) ]

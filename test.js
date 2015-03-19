@@ -18,5 +18,14 @@ test('parseCacheControl', function (t) {
   header = parseCacheControl('must-revalidate, max-age=a3600');
   t.notOk(header);
 
+  header = parseCacheControl(123);
+  t.notOk(header);
+
+  header = parseCacheControl(null);
+  t.notOk(header);
+
+  header = parseCacheControl(undefined);
+  t.notOk(header);
+
   t.end();
 });
