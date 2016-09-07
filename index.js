@@ -21,17 +21,24 @@ module.exports = function parseCacheControl(field) {
     return '';
   });
 
-  if (header['max-age']) {
-    try {
-      var maxAge = parseInt(header['max-age'], 10);
-      if (isNaN(maxAge)) {
-        return null;
-      }
+  var numbers = [
+    'max-age',
+    's-maxage'
+  ];
 
-      header['max-age'] = maxAge;
-    }
-    catch (err) { }
-  }
+  numbers
+    .filter(function (key) { return header[key]; })
+    .forEach(function (key) {
+      try {
+        var maxAge = parseInt(header[key], 10);
+        if (isNaN(maxAge)) {
+          err = 'Cache-Control['+key+'] parsed but is not a number';
+        }
+        header[key] = maxAge;
+      } catch (e) {
+        err = 'Cache-Control['+key+'] not parseable';
+      }
+    });
 
   return (err ? null : header);
 };
